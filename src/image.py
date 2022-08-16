@@ -50,8 +50,6 @@ def next_power_of_2(num):
 
 
 def get_resize_img_dim(image: Image):
-    return 128
-
     width, height = image.size
 
     min_dim = width if width < height else height
