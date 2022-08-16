@@ -67,14 +67,14 @@ python /src/main.py rotate [ filepath ] [ outputpath ] [ --numpy ]
 
 Onde:
 
-filepath = caminho da imagem a ser manipulada
-outputpath = caminho de destino da imagem manipulada
---numpy = utilizar algoritmo de multiplicação do numpy
+filepath = caminho da imagem a ser manipulada <br>
+outputpath = caminho de destino da imagem manipulada <br>
+--numpy = utilizar algoritmo de multiplicação do numpy <br>
 
 Exemplos:
-python /src/main.py rotate pikachu.png . --numpy
+python /src/main.py rotate pikachu.png . --numpy <br>
 
-python /src/main.py flip pikachu.png .
+python /src/main.py flip pikachu.png . <br>
 ## Observações
 
 Por razões de escopo, convertemos a imagem para preto e branco para que seja uma representação de uma matriz quadradada com as dimensões da imagem.
