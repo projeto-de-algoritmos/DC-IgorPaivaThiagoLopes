@@ -3,6 +3,7 @@ import argparse
 from PIL import Image
 from pathlib import Path
 
+
 from image import (
     convert_to_greyscale,
     convert_to_jpg,
@@ -51,9 +52,7 @@ def add_args(parser):
 
 
 def setup():
-    parser = argparse.ArgumentParser(
-        prog="PROG", description="Command line interface for ALGUMA COISA"
-    )
+    parser = argparse.ArgumentParser(description="Command line interface")
 
     subparsers = parser.add_subparsers(dest="command", help="sub-command help")
 
