@@ -1,9 +1,8 @@
 import io
-import sys
 from PIL import Image
 import numpy as np
 import matplotlib.image as img
-
+from strassen import strassen, brute_force
 
 def image_to_byteio(image: Image):
     output = io.BytesIO()
@@ -14,7 +13,7 @@ def image_to_byteio(image: Image):
 
 
 def convert_to_jpg(image: Image):
-    return image_to_byteio(image)
+    return Image.open(image_to_byteio(image))
 
 
 def convert_to_greyscale(image: Image):
@@ -50,12 +49,13 @@ def next_power_of_2(num):
 
 
 def get_resize_img_dim(image: Image):
+
     width, height = image.size
 
     min_dim = width if width < height else height
 
     if is_power_of_2(min_dim):
-        return min_dim, min_dim
+        return min_dim
 
     prev_pow_2 = prev_power_of_2(min_dim)
     next_pow_2 = next_power_of_2(min_dim)
@@ -67,8 +67,6 @@ def get_resize_img_dim(image: Image):
 
 
 def resize_image(image: Image):
-    print(get_resize_img_dim(image))  # TODO: remove this
-
     dim = get_resize_img_dim(image)
 
     return image.resize((dim, dim))
@@ -93,39 +91,21 @@ def flip_matrix(size):
 
     return matrix
 
+def matrix_dim(matrix):
+    return matrix.shape[0]
 
-def call_operation(op: str, matrix: np.array):
-    dim = matrix.shape[0]
+def get_mult_func(use_numpy):
+    if use_numpy:
+        return np.matmul
 
-    if op == "flip":
-        return np.matmul(matrix, flip_matrix(dim))
+    return strassen
 
-    if op == "rotate_90_deg_left":
-        return np.matmul(np.transpose(matrix), flip_matrix(dim))
+def flip_image(matrix, use_numpy):
+    mat_mul = get_mult_func(use_numpy)
 
-    if op == "test":
-        return np.matmul(matrix, np.ones((dim, dim)))
+    return mat_mul(matrix, flip_matrix(matrix_dim(matrix)))
 
-    return matrix
+def rotate_90_deg_image(matrix, use_numpy):
+    mat_mul = get_mult_func(use_numpy)
 
-
-if __name__ == "__main__":
-    if len(sys.argv) < 3:
-        print("Correct usage: python3 main.py <INPUT_FILE_PATH> <OUTPUT_FILE_PATH>")
-        exit(0)
-
-    file_path = sys.argv[1]
-    output_path = sys.argv[2]
-
-    converted_img = convert_to_greyscale(Image.open(file_path))
-
-    if not file_path.endswith(".jpg"):
-        converted_img = convert_to_jpg(converted_img)
-
-    resized_img = resize_image(converted_img)
-
-    img_matrix = get_image_matrix(resized_img)
-
-    result = call_operation("flip", img_matrix)
-
-    save_result_image(result, output_path)
+    return mat_mul(np.transpose(matrix), flip_matrix(matrix_dim(matrix)))
