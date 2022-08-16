@@ -13,6 +13,7 @@ from image import (
     rotate_90_deg_image,
 )
 
+
 def prepare_image(file_path):
 
     converted_img = convert_to_greyscale(Image.open(file_path))
@@ -37,7 +38,7 @@ def add_args(parser):
         "output_path",
         type=lambda p: Path(p).absolute(),
         default=Path(__file__).absolute().parent / "data",
-        help="Path to the output image file",
+        help="Path to the output image directory",
     )
 
     parser.add_argument(
@@ -48,10 +49,10 @@ def add_args(parser):
 
     parser.set_defaults(numpy=False)
 
+
 def setup():
     parser = argparse.ArgumentParser(
-        prog='PROG',
-        description="Command line interface for ALGUMA COISA"
+        prog="PROG", description="Command line interface for ALGUMA COISA"
     )
 
     subparsers = parser.add_subparsers(dest="command", help="sub-command help")
@@ -60,7 +61,7 @@ def setup():
 
     add_args(parser_flip)
 
-    parser_rotate = subparsers.add_parser("rotate", help="Rotates an image")
+    parser_rotate = subparsers.add_parser("rotate", help="Rotates an image 90º left")
 
     add_args(parser_rotate)
 
@@ -73,19 +74,14 @@ def setup():
 
     img_matrix = prepare_image(str(args.path))
 
-    result= img_matrix
+    result = img_matrix
 
-    if args.command == 'flip':
+    if args.command == "flip":
         result = flip_image(img_matrix, args.numpy)
-    elif args.command == 'rotate':
+    elif args.command == "rotate":
         result = rotate_90_deg_image(img_matrix, args.numpy)
 
-
-    print("Result shape: ", result.shape)
-    print("Result type: ", type(result))
-    print("Result: ", result)
-
-    save_result_image(result, args.output_path)
+    save_result_image(result, f"{args.output_path}/{args.path.stem}_{args.command}.jpg")
 
 
 def main():

@@ -1,5 +1,6 @@
 import numpy as np
 
+
 def brute_force(A, B):
     n, m, p = A.shape[0], A.shape[1], B.shape[1]
 
@@ -12,12 +13,19 @@ def brute_force(A, B):
 
     return result
 
+
 def split(matrix):
     rows, columns = matrix.shape
     rows = rows // 2
     columns = columns // 2
 
-    return matrix[:rows, :columns], matrix[:rows, columns:], matrix[rows:, :columns], matrix[rows:, columns:]
+    return (
+        matrix[:rows, :columns],
+        matrix[:rows, columns:],
+        matrix[rows:, :columns],
+        matrix[rows:, columns:],
+    )
+
 
 def strassen(A, B):
     if len(A) <= 2:

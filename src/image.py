@@ -2,7 +2,8 @@ import io
 from PIL import Image
 import numpy as np
 import matplotlib.image as img
-from strassen import strassen, brute_force
+from strassen import strassen
+
 
 def image_to_byteio(image: Image):
     output = io.BytesIO()
@@ -49,6 +50,7 @@ def next_power_of_2(num):
 
 
 def get_resize_img_dim(image: Image):
+    return 128
 
     width, height = image.size
 
@@ -91,8 +93,10 @@ def flip_matrix(size):
 
     return matrix
 
+
 def matrix_dim(matrix):
     return matrix.shape[0]
+
 
 def get_mult_func(use_numpy):
     if use_numpy:
@@ -100,10 +104,12 @@ def get_mult_func(use_numpy):
 
     return strassen
 
+
 def flip_image(matrix, use_numpy):
     mat_mul = get_mult_func(use_numpy)
 
     return mat_mul(matrix, flip_matrix(matrix_dim(matrix)))
+
 
 def rotate_90_deg_image(matrix, use_numpy):
     mat_mul = get_mult_func(use_numpy)
